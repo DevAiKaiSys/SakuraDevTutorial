@@ -7,3 +7,12 @@ content-type: application/json
     "email":"dev@gmail.com",
     "password": "1234"
 }
+
+### test login
+POST http://localhost:8000/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "username":"dev@gmail.com",
+    "password": "1234"
+}

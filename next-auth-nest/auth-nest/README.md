@@ -62,16 +62,25 @@ $ npx prisma studio
 $ npm i --save class-validator class-transformer
 ```
 
-# hash passwords
+# [Authentication](https://docs.nestjs.com/security/authentication)
 
-## [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
+## [Hashing](https://docs.nestjs.com/security/encryption-and-hashing#hashing)
+
+### [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 
 ```bash
 $ npm install bcrypt
+$ npm i -D @types/bcrypt
 ```
 
 ```bash
 $ nest g mo auth
 $ nest g s auth --no-spec
 $ nest g co auth --no-spec
+```
+
+### [JWT token](https://docs.nestjs.com/security/authentication#jwt-token)
+
+```bash
+$ npm install --save @nestjs/jwt
 ```
