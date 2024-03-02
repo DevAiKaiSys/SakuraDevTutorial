@@ -33,3 +33,45 @@ model User {
 ```bash
 $ npx prisma migrate dev --name init
 ```
+
+[nest CLI command](https://docs.nestjs.com/cli/usages#nest-generate)
+
+```bash
+$ nest g mo user
+$ nest g s user --no-spec
+$ nest g co user --no-spec
+```
+
+or Generating a new [resource](https://docs.nestjs.com/recipes/crud-generator#generating-a-new-resource)
+
+```bash
+$ nest g resource users --no-spec
+```
+
+### [Prisma Studio](https://www.prisma.io/docs/orm/tools/prisma-studio)
+
+visual editor for the data in database
+
+```bash
+$ npx prisma studio
+```
+
+# [Validation](https://docs.nestjs.com/techniques/validation)
+
+```bash
+$ npm i --save class-validator class-transformer
+```
+
+# hash passwords
+
+## [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
+
+```bash
+$ npm install bcrypt
+```
+
+```bash
+$ nest g mo auth
+$ nest g s auth --no-spec
+$ nest g co auth --no-spec
+```
