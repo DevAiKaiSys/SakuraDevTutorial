@@ -3,6 +3,15 @@ import { type TokenSet } from "@auth/core/types";
 
 export const authConfig = {
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
+      }
+      return true;
+    },
     async jwt({ token, user, account }) {
       if (account && user) {
         if (account.type === "credentials") {
@@ -11,6 +20,7 @@ export const authConfig = {
             access_token: myUser.backendTokens.accessToken,
             expires_at: myUser.backendTokens.expiresIn,
             refresh_token: myUser.backendTokens.refreshToken,
+            backendTokens: myUser.backendTokens,
             user: myUser.user,
           };
         }
@@ -64,6 +74,7 @@ export const authConfig = {
     async session({ session, token }) {
       if (token.user) {
         session.user = { ...session.user, ...token.user };
+        session.backendTokens = token.backendTokens;
         session.error = token.error;
       }
       //   session.error = token.error;
@@ -75,6 +86,11 @@ export const authConfig = {
 
 declare module "@auth/core/types" {
   interface Session {
+    backendTokens: {
+      accessToken: string;
+      refreshToken: string;
+      expiresIn: number;
+    };
     error?: "RefreshAccessTokenError";
   }
 }
@@ -84,6 +100,11 @@ declare module "@auth/core/jwt" {
     access_token: string;
     expires_at: number;
     refresh_token: string;
+    backendTokens: {
+      accessToken: string;
+      refreshToken: string;
+      expiresIn: number;
+    };
     error?: "RefreshAccessTokenError";
   }
 }

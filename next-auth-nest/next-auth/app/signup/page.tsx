@@ -16,7 +16,7 @@ const SignupPage = () => {
     email: "",
     password: "",
   });
-  
+
   const register = async () => {
     const res = await fetch(
       process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/register",
@@ -32,7 +32,7 @@ const SignupPage = () => {
         },
       }
     );
-    console.log(res);
+
     if (!res.ok) {
       alert(res.statusText);
       return;
