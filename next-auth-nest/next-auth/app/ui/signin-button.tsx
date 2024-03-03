@@ -5,7 +5,6 @@ import React from "react";
 
 const SignInButton = () => {
   const { data: session } = useSession();
-  console.log({ session });
 
   if (session && session.user)
     return (
@@ -29,7 +28,7 @@ const SignInButton = () => {
         Sign In
       </Link>
       <Link
-        href={"/api/auth/signin"}
+        href={"/signup"}
         className="flex gap-4 ml-auto bg-green-600 text-green-200 p-2 rounded"
       >
         Sign Up
