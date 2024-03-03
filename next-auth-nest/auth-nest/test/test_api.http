@@ -19,3 +19,8 @@ content-type: application/json
 
 ### test getProfile
 GET http://localhost:8000/users/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldkBnbWFpbC5jb20iLCJzdWIiOnsibmFtZSI6InNhbXBsZSJ9LCJpYXQiOjE3MDk0MzgwOTgsImV4cCI6MTcwOTQzODExOH0.YXqa8uR-g7PAjRa65mABj9INXdt6dUxnv3e4TW7i5MY
+
+### test Refresh
+POST http://localhost:8000/auth/refresh HTTP/1.1
+Authorization: Refresh eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRldkBnbWFpbC5jb20iLCJzdWIiOnsibmFtZSI6InNhbXBsZSJ9LCJpYXQiOjE3MDk0NDAwMDEsImV4cCI6MTcxMDA0NDgwMX0.RMxVIdIVKBX3OMBEoCx-ALcXkY4cQnUjNXsqkN6Bm5E

@@ -3,8 +3,16 @@ import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/auth.dto';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from './guard/constants';
 
 const EXPIRE_TIME = 20 * 1000;
+
+export type UserToken = {
+  username: string;
+  sub: {
+    name: string;
+  };
+};
 
 @Injectable()
 export class AuthService {
@@ -29,7 +37,7 @@ export class AuthService {
 
   async login(dto: LoginDto) {
     const user = await this.validateUser(dto);
-    const payload = {
+    const payload: UserToken = {
       username: user.email,
       sub: {
         name: user.name,
@@ -41,11 +49,11 @@ export class AuthService {
       backendTokens: {
         accessToken: await this.jwtService.signAsync(payload, {
           expiresIn: '20s',
-          secret: process.env.jwtSecretKey,
+          secret: jwtConstants.secret,
         }),
         refreshToken: await this.jwtService.signAsync(payload, {
           expiresIn: '7d',
-          secret: process.env.jwtRefreshTokenKey,
+          secret: jwtConstants.refreshToken,
         }),
         expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
       },
@@ -60,5 +68,24 @@ export class AuthService {
       return result;
     }
     throw new UnauthorizedException();
+  }
+
+  async refreshToken(user: UserToken) {
+    const payload = {
+      username: user.username,
+      sub: user.sub,
+    };
+
+    return {
+      accessToken: await this.jwtService.signAsync(payload, {
+        expiresIn: '20s',
+        secret: process.env.jwtSecretKey,
+      }),
+      refreshToken: await this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
+        secret: process.env.jwtRefreshTokenKey,
+      }),
+      expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
+    };
   }
 }

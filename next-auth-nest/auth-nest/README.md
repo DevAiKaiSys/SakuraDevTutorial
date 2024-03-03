@@ -9,7 +9,7 @@ $ nest new project-name
 
 ## [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
 
-Recipes [Prisma](https://docs.nestjs.com/recipes/prisma#use-prisma-client-in-your-nestjs-services) document
+[Prisma recipe](https://docs.nestjs.com/recipes/prisma#use-prisma-client-in-your-nestjs-services)
 
 example code [rest-nestjs](https://github.com/prisma/prisma-examples/tree/latest/typescript/rest-nestjs)
 
