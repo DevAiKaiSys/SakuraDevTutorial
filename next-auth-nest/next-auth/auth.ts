@@ -1,10 +1,12 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { authConfig } from "./auth.config";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
-      name: "Credentials",
+      name: "Credentials", // button name
       credentials: {
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
@@ -31,6 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
         const user = await res.json();
+
         return user;
       },
     }),

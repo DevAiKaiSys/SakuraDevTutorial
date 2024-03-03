@@ -14,6 +14,8 @@ npx create-next-app@latest
 npm install next-auth@beta
 ```
 
+[Refresh token rotation](https://authjs.dev/guides/basics/refresh-token-rotation)
+
 ### Provider
 
 [Credentials Provider](https://authjs.dev/guides/providers/credentials#example---username--password)
