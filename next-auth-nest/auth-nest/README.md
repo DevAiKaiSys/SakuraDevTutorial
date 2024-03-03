@@ -62,6 +62,13 @@ $ npx prisma studio
 $ npm i --save class-validator class-transformer
 ```
 
+transform params type
+
+```
+// src/main.ts
+app.useGlobalPipes(new ValidationPipe({ transform: true }));
+```
+
 # [Authentication](https://docs.nestjs.com/security/authentication)
 
 ## [Hashing](https://docs.nestjs.com/security/encryption-and-hashing#hashing)

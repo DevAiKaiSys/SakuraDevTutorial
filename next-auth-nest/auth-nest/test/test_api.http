@@ -16,3 +16,6 @@ content-type: application/json
     "username":"dev@gmail.com",
     "password": "1234"
 }
+
+### test getProfile
+GET http://localhost:8000/users/1 HTTP/1.1
