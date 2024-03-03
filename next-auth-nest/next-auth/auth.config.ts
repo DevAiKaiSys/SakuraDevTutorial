@@ -1,9 +1,70 @@
 import type { NextAuthConfig } from "next-auth";
 import { type TokenSet } from "@auth/core/types";
+import { JWT } from "next-auth/jwt";
+
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+  try {
+    const url =
+      "https://oauth2.googleapis.com/token?" +
+      new URLSearchParams({
+        // client_id: process.env.GOOGLE_CLIENT_ID,
+        // client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        // grant_type: "refresh_token",
+        // refresh_token: token.refreshToken,
+      });
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      method: "POST",
+    });
+
+    const refreshedTokens = await response.json();
+
+    if (!response.ok) {
+      throw refreshedTokens;
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+    };
+  } catch (error) {
+    console.log(error);
+
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    };
+  }
+}
+
+async function refreshToken(token: JWT): Promise<JWT> {
+  const res = await fetch(
+    process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/refresh",
+    {
+      method: "POST",
+      headers: {
+        authorization: `Refresh ${token.backendTokens.refreshToken}`,
+      },
+    }
+  );
+  console.log("refreshed");
+
+  const response = await res.json();
+
+  return {
+    ...token,
+    backendTokens: response,
+  };
+}
 
 export const authConfig = {
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
+    async authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
       if (isOnDashboard) {
@@ -25,7 +86,11 @@ export const authConfig = {
           };
         }
       }
-      return token;
+      // console.log(new Date());
+      // console.log(token.backendTokens.expiresIn);
+      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+
+      return await refreshToken(token);
       //   if (account) {
       //     // Save the access token and refresh token in the JWT on the initial login
       //     return {
